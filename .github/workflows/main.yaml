@@ -54,3 +54,5 @@ jobs:
             git add .
             git commit -m "Updated image of express-03/deployment.yaml with ${{secrets.DOCKERHUB_USERNAME}}/express-03:${{github.sha}}"
             git push origin HEAD
+
+            
