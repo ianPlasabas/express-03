@@ -41,6 +41,7 @@ jobs:
           uses: actions/checkout@v4.2.2
           with:
               repository: ianPlasabas/argocd-config
+              path: express-03
               ssh-key: ${{secrets.SSH_KEY}}
         - name: Modify image name
           run: |
