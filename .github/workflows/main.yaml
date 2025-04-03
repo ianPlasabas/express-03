@@ -48,7 +48,7 @@ jobs:
             git config --global user.name "github.actions"
             git config --global user.email "github.actions@noreply.com"
 
-            sed -i "s#image: .*#image: ${{secrets.DOCKERHUB_USERNAME}}/express-03:${{github.sha}}#" "express-03/deployment.yaml"
+            sed -i "s#image: .*#image: ${{secrets.DOCKERHUB_USERNAME}}/express-03:${{github.sha}}#" "deployment.yaml"
 
             git add .
             git commit -m "Updated image of express-03/deployment.yaml with ${{secrets.DOCKERHUB_USERNAME}}/express-03:${{github.sha}}"
