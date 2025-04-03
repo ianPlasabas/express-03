@@ -1,0 +1,34 @@
+name: ci-cd-express-03
+on:
+  push:
+    branches:
+      - 'main'
+jobs:
+
+  code-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull Repository
+        uses: actions/checkout@v4.2.2
+      - name: Setup Node Environment
+        uses: actions/setup-node@v4.3.0
+      - name: Code Testing
+        run: echo "Test successfull"
+  
+  build-and-push:
+    needs: code-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull Repository
+        uses: actions/checkout@v4.2.2
+      - name: Docker Login
+        uses: docker/login-action@v3.4.0
+        with:
+          username: ${{secrets.DOCKERHUB_USERNAME}}
+          password: ${{secrets.DOCKERHUB_TOKEN}}
+      - name: Build Image and Push
+        uses: docker/build-push-action@v6.15.0
+        with:
+          file: Dockerfile
+          push: true
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/express-03:${{github.sha}}
