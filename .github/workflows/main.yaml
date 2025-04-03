@@ -32,3 +32,24 @@ jobs:
           file: Dockerfile
           push: true
           tags: ${{secrets.DOCKERHUB_USERNAME}}/express-03:${{github.sha}}
+
+  deployment:
+      needs: build-and-push
+      runs-on: ubuntu-latest
+      steps:
+        - name: Pull Repository
+          uses: actions/checkout@v4.2.2
+          with:
+              repository: ianPlasabas/argocd-config
+              ssh-key: ${{secrets.SSH_KEY}}
+        - name: Modify image name
+          run: |
+            cd express-03
+            git config --global user.name "github.actions"
+            git config --global user.email "github.actions@noreply.com"
+
+            sed -i "s#image: .*#image: ${{secrets.DOCKERHUB_USERNAME}}/express-03:${{github.sha}}#" "express-03/deployment.yaml"
+
+            git add .
+            git commit -m "Updated image of express-03/deployment.yaml with ${{secrets.DOCKERHUB_USERNAME}}/express-03:${{github.sha}}"
+            git push origin HEAD
